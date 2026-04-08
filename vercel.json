@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run vercel-build",
   "framework": "remix",
-  "installCommand": "npm install",
+  "installCommand": "npm install --legacy-peer-deps",
   "regions": ["iad1"]
 }
