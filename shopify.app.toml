@@ -23,14 +23,6 @@ api_version = "2026-04"
   topics = ["app/uninstalled"]
   uri = "/webhooks"
 
-  [[webhooks.subscriptions]]
-  topics = ["orders/paid"]
-  uri = "/webhooks"
-
-  [[webhooks.subscriptions]]
-  topics = ["orders/fulfilled"]
-  uri = "/webhooks"
-
 [app_proxy]
 url = "https://doomlings-loyalty.vercel.app/proxy"
 subpath = "loyalty"
