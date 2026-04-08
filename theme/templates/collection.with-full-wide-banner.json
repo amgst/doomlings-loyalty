@@ -1,0 +1,207 @@
+{
+  "sections": {
+    "main-collection-banner": {
+      "type": "main-collection-banner",
+      "blocks": {
+        "collection-banner-content": {
+          "type": "_collection-banner-content",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "position": "bottom-left",
+            "width": "fit-content",
+            "custom_width": 100,
+            "show_content_below_mobile": false,
+            "h_alignment_mobile": "flex-start",
+            "position_mobile": "bottom",
+            "device": "desktop",
+            "padding-block-start": 48,
+            "padding-block-end": 48,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "padding-block-start-mobile": 32,
+            "padding-block-end-mobile": 32,
+            "padding-inline-start-mobile": 0,
+            "padding-inline-end-mobile": 0
+          },
+          "blocks": {
+            "breadcrumbs_PeHzGk": {
+              "type": "_breadcrumbs",
+              "name": "t:names.breadcrumbs",
+              "settings": {
+                "padding-block-start": 0,
+                "padding-block-end": 24,
+                "mobile-padding-scale": 50
+              },
+              "blocks": {}
+            },
+            "collection_title_UyCfUi": {
+              "type": "_collection-title",
+              "name": "t:names.collection_title",
+              "settings": {
+                "type_preset": "h1",
+                "font": "var(--font-body--family)",
+                "font_weight": "",
+                "font_size": 15,
+                "font_size_mobile": 15,
+                "line_height": "normal",
+                "text_color": "text",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "mobile-padding-scale": 80,
+                "animation_type": "fade-up",
+                "animation_delay": 50
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "breadcrumbs_PeHzGk",
+            "collection_title_UyCfUi"
+          ]
+        }
+      },
+      "name": "t:names.collection_banner",
+      "settings": {
+        "container": "full",
+        "enable_header_overlay": true,
+        "height": "medium",
+        "show_image": true,
+        "toggle_overlay": true,
+        "overlay_color": "#00000033",
+        "height_mobile": "auto",
+        "color_scheme": "scheme-inverse",
+        "border_radius": 20,
+        "device": "desktop",
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "product-card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "settings": {
+        "container": "fixed",
+        "products_per_page": 12,
+        "pagination": "number",
+        "column_gap": 30,
+        "row_gap": 30,
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "enable_grid_density": true,
+        "expand_filter_groups": "Availability, Price, Color, Size, Categories, Product type",
+        "column_gap_mobile": 8,
+        "row_gap_mobile": 24,
+        "device": "mobile",
+        "padding-block-start": 60,
+        "padding-block-end": 100,
+        "padding-block-start-mobile": 24,
+        "padding-block-end-mobile": 48
+      }
+    },
+    "custom_section_hapzhQ": {
+      "type": "custom-section",
+      "blocks": {
+        "text_gqPXA7": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<h2><strong>About Pebble</strong></h2>",
+            "highlight_style": "none",
+            "highlight_font_style": "italic",
+            "highlight_shape_color": "",
+            "highlight_text_color": "",
+            "type_preset": "h3",
+            "font": "var(--font-body--family)",
+            "font_weight": "",
+            "font_size": 15,
+            "font_size_mobile": 15,
+            "line_height": "normal",
+            "text_color": "text",
+            "text_color_gradient": "",
+            "width": "fit-content",
+            "text_alignment": "left",
+            "width_mobile": "fit-content",
+            "text_alignment_mobile": "left",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "mobile-padding-scale": 80,
+            "animation_type": "fade-up",
+            "animation_delay": 50
+          },
+          "blocks": {}
+        },
+        "collapsible_text_ryCAyV": {
+          "type": "collapsible-text",
+          "name": "t:names.collapsible_text",
+          "settings": {
+            "text": "<p>Our store is built on a simple belief: great style should feel effortless. We design each piece with a balance of comfort, quality, and modern appeal, creating clothing that fits easily into everyday life. From soft fabrics to thoughtful fits, every detail is considered with care. We aim to offer pieces that make getting dressed feel enjoyable and inspiring.</p><p>Quality is at the heart of everything we create. We choose durable, comfortable materials and focus on precise construction to ensure each item feels as good as it looks. Our collections are made to stand the test of time—supporting busy routines, relaxed weekends, and everything in between. We want every customer to feel confident in pieces that truly last.</p><p>Our designs celebrate versatility and personal expression. Whether you’re searching for everyday essentials or standout favorites, our store offers a curated mix of styles suited to different moods, moments, and lifestyles. We believe fashion should empower, not overwhelm. That’s why we create clothing that feels natural, expressive, and easy to wear—helping you look and feel your best every day.</p><p></p>",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_weight": "",
+            "font_size": 15,
+            "font_size_mobile": 15,
+            "line_height": "normal",
+            "text_color": "subtext",
+            "line_limit": "4-lines",
+            "button_style": "primary",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "mobile-padding-scale": 80
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_gqPXA7",
+        "collapsible_text_ryCAyV"
+      ],
+      "name": "t:names.rich_text",
+      "settings": {
+        "container": "page-width",
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "column_gap": 30,
+        "row_gap": 24,
+        "column_gap_mobile": 12,
+        "row_gap_mobile": 12,
+        "use_color_scheme_in_container": true,
+        "color_scheme": "scheme-4",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 20,
+        "device": "desktop",
+        "padding-block-start": 40,
+        "padding-block-end": 40,
+        "padding-inline-start": 50,
+        "padding-inline-end": 50,
+        "padding-block-start-mobile": 32,
+        "padding-block-end-mobile": 32,
+        "padding-inline-start-mobile": 20,
+        "padding-inline-end-mobile": 20
+      }
+    }
+  },
+  "order": [
+    "main-collection-banner",
+    "main",
+    "custom_section_hapzhQ"
+  ]
+}

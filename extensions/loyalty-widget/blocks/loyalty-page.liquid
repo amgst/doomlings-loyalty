@@ -1,0 +1,528 @@
+{% comment %}
+  Doomlings Loyalty — Full Loyalty Page Block
+  Designed to match the Pebble theme design system.
+  Uses Pebble's CSS custom properties for colors, fonts, spacing, and buttons.
+{% endcomment %}
+
+{%- liquid
+  assign app_url = settings.doomlings_loyalty_app_url | default: ''
+  assign show_referral = block.settings.show_referral
+  assign show_history = block.settings.show_history
+  assign section_padding_top = section.settings.padding_top | default: 60
+  assign section_padding_bottom = section.settings.padding_bottom | default: 60
+  assign color_scheme = section.settings.color_scheme | default: 'scheme-1'
+-%}
+
+<div
+  class="loyalty-page-section color-{{ color_scheme }} gradient"
+  style="padding-top: {{ section_padding_top }}px; padding-bottom: {{ section_padding_bottom }}px;"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width loyalty-container">
+
+    {%- if customer -%}
+      {%- comment %} Logged-in customer view {%- endcomment %}
+
+      {%- comment %} Hero / Points Balance {%- endcomment %}
+      <div class="loyalty-hero" id="loyalty-hero" data-loading="true">
+        <div class="loyalty-hero__inner">
+          <div class="loyalty-hero__greeting">
+            <p class="loyalty-hero__eyebrow">
+              {{ block.settings.greeting_label | default: 'Welcome back,' }}
+            </p>
+            <h1 class="loyalty-hero__name h2">{{ customer.first_name }}</h1>
+          </div>
+          <div class="loyalty-hero__balance-wrap">
+            <div class="loyalty-hero__balance" id="loyalty-points-balance">
+              <span class="loyalty-hero__balance-icon" id="loyalty-currency-symbol">★</span>
+              <span class="loyalty-hero__balance-number" id="loyalty-points-value">—</span>
+            </div>
+            <p class="loyalty-hero__balance-label" id="loyalty-points-label">points</p>
+            <div class="loyalty-hero__tier" id="loyalty-tier" hidden>
+              <span class="loyalty-tier-badge" id="loyalty-tier-name"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- comment %} Tab Navigation {%- endcomment %}
+      <div class="loyalty-tabs" role="tablist" aria-label="Loyalty sections">
+        <button
+          class="loyalty-tab active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="tab-earn"
+          id="tab-btn-earn"
+          data-tab="earn"
+        >{{ block.settings.tab_earn | default: 'Ways to Earn' }}</button>
+        <button
+          class="loyalty-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-rewards"
+          id="tab-btn-rewards"
+          data-tab="rewards"
+        >{{ block.settings.tab_rewards | default: 'Rewards' }}</button>
+        {% if show_referral %}
+        <button
+          class="loyalty-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-refer"
+          id="tab-btn-refer"
+          data-tab="refer"
+        >{{ block.settings.tab_refer | default: 'Refer a Friend' }}</button>
+        {% endif %}
+        {% if show_history %}
+        <button
+          class="loyalty-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-history"
+          id="tab-btn-history"
+          data-tab="history"
+        >{{ block.settings.tab_history | default: 'History' }}</button>
+        {% endif %}
+      </div>
+
+      {%- comment %} Tab: Earn Points {%- endcomment %}
+      <div id="tab-earn" class="loyalty-tab-panel" role="tabpanel" aria-labelledby="tab-btn-earn">
+        <div class="loyalty-loading" id="earn-loading">
+          <div class="loyalty-spinner"></div>
+        </div>
+        <div class="loyalty-earn-grid" id="earn-grid" hidden></div>
+      </div>
+
+      {%- comment %} Tab: Rewards {%- endcomment %}
+      <div id="tab-rewards" class="loyalty-tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-rewards">
+        <div class="loyalty-loading" id="rewards-loading">
+          <div class="loyalty-spinner"></div>
+        </div>
+        <div class="loyalty-rewards-grid" id="rewards-grid" hidden></div>
+        <div id="redeem-result" class="loyalty-alert" hidden></div>
+      </div>
+
+      {%- comment %} Tab: Referral {%- endcomment %}
+      {% if show_referral %}
+      <div id="tab-refer" class="loyalty-tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-refer">
+        <div class="loyalty-referral-card loyalty-card" id="referral-card">
+          <h2 class="loyalty-card__title">{{ block.settings.referral_heading | default: 'Share the love' }}</h2>
+          <p class="loyalty-card__body">
+            {{ block.settings.referral_body | default: 'Give your friends a discount and earn points when they make their first purchase.' }}
+          </p>
+          <div class="referral-link-box" id="referral-link-box" hidden>
+            <input
+              type="text"
+              id="referral-link-input"
+              class="loyalty-input"
+              readonly
+              aria-label="Your referral link"
+            >
+            <button
+              class="btn btn--primary btn--medium loyalty-copy-btn"
+              id="copy-referral-btn"
+              type="button"
+            >Copy Link</button>
+          </div>
+          <p id="referral-code-hint" class="loyalty-hint" hidden>
+            Your referral code: <strong id="referral-code-text"></strong>
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      {%- comment %} Tab: History {%- endcomment %}
+      {% if show_history %}
+      <div id="tab-history" class="loyalty-tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-history">
+        <div class="loyalty-loading" id="history-loading">
+          <div class="loyalty-spinner"></div>
+        </div>
+        <div class="loyalty-history" id="history-list" hidden></div>
+      </div>
+      {% endif %}
+
+    {%- else -%}
+      {%- comment %} Logged-out / guest view {%- endcomment %}
+      <div class="loyalty-guest loyalty-card">
+        <div class="loyalty-guest__icon">★</div>
+        <h2 class="loyalty-guest__heading h2">
+          {{ block.settings.guest_heading | default: 'Join the Doomlings Loyalty Program' }}
+        </h2>
+        <p class="loyalty-guest__body">
+          {{ block.settings.guest_body | default: 'Earn points on every purchase, leave reviews, and refer friends to unlock exclusive rewards.' }}
+        </p>
+        <div class="loyalty-guest__actions">
+          <a href="{{ routes.account_login_url }}" class="btn btn--primary btn--medium">
+            {{ block.settings.login_label | default: 'Sign In' }}
+          </a>
+          <a href="{{ routes.account_register_url }}" class="btn btn--secondary btn--medium">
+            {{ block.settings.register_label | default: 'Create Account' }}
+          </a>
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% if customer %}
+<script>
+(function() {
+  var APP_URL = {{ app_url | json }};
+  var SHOP = {{ shop.permanent_domain | json }};
+  var EMAIL = {{ customer.email | json }};
+
+  var currencySymbol = '★';
+  var pointsNamePlural = 'points';
+  var earningRules = [];
+  var rewards = [];
+
+  function $(id) { return document.getElementById(id); }
+
+  // ---- Fetch customer profile ----
+  function loadProfile() {
+    fetch(APP_URL + '/api/loyalty?shop=' + encodeURIComponent(SHOP) + '&email=' + encodeURIComponent(EMAIL))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.customer) return;
+        var c = data.customer;
+        currencySymbol = data.currencySymbol || '★';
+        pointsNamePlural = data.pointsNamePlural || 'points';
+
+        // Update balance
+        $('loyalty-currency-symbol').textContent = currencySymbol;
+        $('loyalty-points-value').textContent = c.pointsBalance.toLocaleString();
+        $('loyalty-points-label').textContent = pointsNamePlural;
+
+        // Tier
+        if (c.tierName) {
+          $('loyalty-tier').hidden = false;
+          $('loyalty-tier-name').textContent = c.tierName;
+        }
+
+        // Referral
+        {% if show_referral %}
+        if (c.referralLink) {
+          $('referral-link-box').hidden = false;
+          $('referral-link-input').value = c.referralLink;
+        }
+        if (c.referralCode) {
+          $('referral-code-hint').hidden = false;
+          $('referral-code-text').textContent = c.referralCode;
+        }
+        {% endif %}
+
+        // History
+        {% if show_history %}
+        if (data.history && data.history.length) {
+          renderHistory(data.history);
+        } else {
+          $('history-loading').hidden = true;
+          $('history-list').hidden = false;
+          $('history-list').innerHTML = '<p class="loyalty-empty">No points activity yet.</p>';
+        }
+        {% endif %}
+
+        $('loyalty-hero').removeAttribute('data-loading');
+      })
+      .catch(function() {
+        $('loyalty-points-value').textContent = '—';
+      });
+  }
+
+  // ---- Fetch rules & rewards ----
+  function loadRules() {
+    fetch(APP_URL + '/api/loyalty?shop=' + encodeURIComponent(SHOP) + '&action=rules')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        earningRules = data.earningRules || [];
+        rewards = data.rewards || [];
+        renderEarnGrid(earningRules, data.currencySymbol || currencySymbol);
+        renderRewardsGrid(rewards);
+        $('earn-loading').hidden = true;
+        $('earn-grid').hidden = false;
+        $('rewards-loading').hidden = true;
+        $('rewards-grid').hidden = false;
+      })
+      .catch(function() {
+        $('earn-loading').hidden = true;
+        $('earn-grid').innerHTML = '<p class="loyalty-empty">Unable to load earning rules.</p>';
+        $('earn-grid').hidden = false;
+      });
+  }
+
+  // ---- Render: Earn grid ----
+  var ACTION_ICONS = {
+    cart: '🛒', person: '👤', gift: '🎁', share: '🔗',
+    star: '⭐', sparkles: '✨', heart: '❤️'
+  };
+  function renderEarnGrid(rules, sym) {
+    if (!rules.length) {
+      $('earn-grid').innerHTML = '<p class="loyalty-empty">No earning rules yet.</p>';
+      return;
+    }
+    $('earn-grid').innerHTML = rules.map(function(r) {
+      return '<div class="loyalty-earn-card loyalty-card">' +
+        '<div class="earn-card__icon">' + (ACTION_ICONS[r.icon] || '⭐') + '</div>' +
+        '<div class="earn-card__info">' +
+          '<h3 class="earn-card__name">' + escHtml(r.name) + '</h3>' +
+          '<p class="earn-card__desc">' + escHtml(r.description) + '</p>' +
+        '</div>' +
+        '<div class="earn-card__points">' +
+          '<span class="earn-card__pts-value">' + (r.points > 0 ? '+' : '') + r.points + '</span>' +
+          '<span class="earn-card__pts-label">' + sym + ' pts</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // ---- Render: Rewards grid ----
+  function renderRewardsGrid(rws) {
+    if (!rws.length) {
+      $('rewards-grid').innerHTML = '<p class="loyalty-empty">No rewards available yet.</p>';
+      return;
+    }
+    $('rewards-grid').innerHTML = rws.map(function(r) {
+      var canRedeem = false; // We'd check balance here in a real app
+      return '<div class="loyalty-reward-card loyalty-card" data-id="' + escAttr(r.id) + '">' +
+        '<div class="reward-card__header">' +
+          '<div class="reward-card__icon">🎁</div>' +
+          '<div class="reward-card__badge">' + r.pointsCost.toLocaleString() + ' pts</div>' +
+        '</div>' +
+        '<h3 class="reward-card__name">' + escHtml(r.name) + '</h3>' +
+        '<p class="reward-card__desc">' + escHtml(r.description) + '</p>' +
+        '<button class="btn btn--primary btn--medium btn--full-mobile redeem-btn" data-id="' + escAttr(r.id) + '" type="button">Redeem</button>' +
+      '</div>';
+    }).join('');
+
+    // Attach click handlers
+    document.querySelectorAll('.redeem-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        redeemReward(btn.getAttribute('data-id'));
+      });
+    });
+  }
+
+  // ---- Render: History ----
+  function renderHistory(events) {
+    $('history-loading').hidden = true;
+    $('history-list').hidden = false;
+    if (!events.length) {
+      $('history-list').innerHTML = '<p class="loyalty-empty">No activity yet.</p>';
+      return;
+    }
+    $('history-list').innerHTML = '<ul class="loyalty-history-list">' +
+      events.map(function(e) {
+        var pos = e.points >= 0;
+        return '<li class="loyalty-history-item">' +
+          '<div class="history-item__info">' +
+            '<span class="history-item__desc">' + escHtml(e.description) + '</span>' +
+            '<span class="history-item__date">' + formatDate(e.createdAt) + '</span>' +
+          '</div>' +
+          '<span class="history-item__points ' + (pos ? 'positive' : 'negative') + '">' +
+            (pos ? '+' : '') + e.points +
+          '</span>' +
+        '</li>';
+      }).join('') +
+    '</ul>';
+  }
+
+  // ---- Redeem ----
+  function redeemReward(id) {
+    var resultEl = $('redeem-result');
+    resultEl.hidden = true;
+    fetch(APP_URL + '/api/loyalty?shop=' + encodeURIComponent(SHOP), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ intent: 'redeem', email: EMAIL, redemptionOptionId: id })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      resultEl.hidden = false;
+      if (data.success) {
+        resultEl.className = 'loyalty-alert loyalty-alert--success';
+        resultEl.textContent = data.code
+          ? '✓ Reward redeemed! Your code: ' + data.code
+          : '✓ Reward redeemed successfully!';
+        loadProfile(); // refresh balance
+      } else {
+        resultEl.className = 'loyalty-alert loyalty-alert--error';
+        resultEl.textContent = '✗ ' + (data.error || 'Redemption failed. Please try again.');
+      }
+    });
+  }
+
+  // ---- Copy referral ----
+  {% if show_referral %}
+  var copyBtn = $('copy-referral-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+      var input = $('referral-link-input');
+      navigator.clipboard.writeText(input.value).then(function() {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function() { copyBtn.textContent = 'Copy Link'; }, 2000);
+      });
+    });
+  }
+  {% endif %}
+
+  // ---- Tabs ----
+  document.querySelectorAll('.loyalty-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.getAttribute('data-tab');
+      document.querySelectorAll('.loyalty-tab').forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.loyalty-tab-panel').forEach(function(p) {
+        p.classList.add('hidden');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      var panel = document.getElementById('tab-' + target);
+      if (panel) panel.classList.remove('hidden');
+    });
+  });
+
+  // ---- Utilities ----
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) { return escHtml(s); }
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch(e) { return iso; }
+  }
+
+  // ---- Init ----
+  if (APP_URL) {
+    loadProfile();
+    loadRules();
+  }
+})();
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Loyalty Page",
+  "target": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0, "max": 100, "step": 4, "unit": "px", "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0, "max": 100, "step": 4, "unit": "px", "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "greeting_label",
+      "label": "Greeting text",
+      "default": "Welcome back,"
+    },
+    {
+      "type": "text",
+      "id": "tab_earn",
+      "label": "Earn tab label",
+      "default": "Ways to Earn"
+    },
+    {
+      "type": "text",
+      "id": "tab_rewards",
+      "label": "Rewards tab label",
+      "default": "Rewards"
+    },
+    {
+      "type": "text",
+      "id": "tab_refer",
+      "label": "Referral tab label",
+      "default": "Refer a Friend"
+    },
+    {
+      "type": "text",
+      "id": "tab_history",
+      "label": "History tab label",
+      "default": "History"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_referral",
+      "label": "Show referral tab",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_history",
+      "label": "Show history tab",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Guest / Logged-out view"
+    },
+    {
+      "type": "text",
+      "id": "guest_heading",
+      "label": "Guest heading",
+      "default": "Join the Doomlings Loyalty Program"
+    },
+    {
+      "type": "textarea",
+      "id": "guest_body",
+      "label": "Guest body text",
+      "default": "Earn points on every purchase, leave reviews, and refer friends to unlock exclusive rewards."
+    },
+    {
+      "type": "text",
+      "id": "login_label",
+      "label": "Sign in button label",
+      "default": "Sign In"
+    },
+    {
+      "type": "text",
+      "id": "register_label",
+      "label": "Create account button label",
+      "default": "Create Account"
+    },
+    {
+      "type": "header",
+      "content": "Referral section"
+    },
+    {
+      "type": "text",
+      "id": "referral_heading",
+      "label": "Referral heading",
+      "default": "Share the love"
+    },
+    {
+      "type": "textarea",
+      "id": "referral_body",
+      "label": "Referral body text",
+      "default": "Give your friends a discount and earn points when they make their first purchase."
+    }
+  ]
+}
+{% endschema %}

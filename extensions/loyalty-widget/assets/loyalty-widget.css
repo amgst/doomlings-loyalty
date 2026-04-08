@@ -1,0 +1,582 @@
+/**
+ * Doomlings Loyalty Widget Styles
+ * Designed to integrate seamlessly with the Pebble theme.
+ * Uses Pebble's CSS custom properties for perfect visual harmony.
+ */
+
+/* ================================================================
+   UTILITY HELPERS
+================================================================ */
+.loyalty-container {
+  max-width: var(--page-width, 144rem);
+  margin-inline: auto;
+  padding-inline: clamp(1.6rem, 4vw, 4rem);
+}
+
+.hidden { display: none !important; }
+
+/* ================================================================
+   HERO / BALANCE
+================================================================ */
+.loyalty-hero {
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  border-radius: var(--dialog-radius, 1.2rem);
+  padding: clamp(3.2rem, 5vw, 6.4rem) clamp(2.4rem, 5vw, 5.6rem);
+  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.loyalty-hero::before {
+  content: "★";
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(12rem, 20vw, 24rem);
+  opacity: 0.06;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.loyalty-hero__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3.2rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.loyalty-hero__eyebrow {
+  font-size: var(--font-subheading--size, 1.3rem);
+  font-family: var(--font-subheading--family, var(--font-body--family));
+  font-weight: var(--font-subheading--weight, 500);
+  text-transform: var(--font-subheading--transform, uppercase);
+  letter-spacing: var(--font-subheading--letter-spacing, 0.08em);
+  color: rgb(var(--color-background) / 60%);
+  margin-bottom: 0.6rem;
+}
+
+.loyalty-hero__name {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  color: rgb(var(--color-background));
+  margin: 0;
+  line-height: 1.1;
+}
+
+.loyalty-hero__balance-wrap {
+  text-align: right;
+}
+
+.loyalty-hero__balance {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+
+.loyalty-hero__balance-icon {
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.loyalty-hero__balance-number {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: clamp(4rem, 7vw, 7.2rem);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: rgb(var(--color-background));
+}
+
+.loyalty-hero__balance-label {
+  font-size: 1.4rem;
+  color: rgb(var(--color-background) / 55%);
+  text-align: right;
+  margin-top: 0.4rem;
+}
+
+/* Loading state */
+.loyalty-hero[data-loading] .loyalty-hero__balance-number {
+  opacity: 0.3;
+}
+
+/* Tier Badge */
+.loyalty-hero__tier {
+  margin-top: 1.2rem;
+  text-align: right;
+}
+
+.loyalty-tier-badge {
+  display: inline-block;
+  background: rgba(var(--color-background), 0.15);
+  color: rgb(var(--color-background));
+  border: 1px solid rgba(var(--color-background), 0.25);
+  border-radius: 10rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ================================================================
+   TABS
+================================================================ */
+.loyalty-tabs {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: var(--border-width, 0.1rem) solid rgb(var(--color-border) / var(--color-border-alpha, 1));
+  margin-bottom: 3.2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.loyalty-tabs::-webkit-scrollbar { display: none; }
+
+.loyalty-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  font-family: var(--font-subheading--family, var(--font-body--family));
+  font-weight: var(--font-subheading--weight, 600);
+  font-size: var(--font-subheading--size, 1.3rem);
+  text-transform: var(--font-subheading--transform, uppercase);
+  letter-spacing: var(--font-subheading--letter-spacing, 0.06em);
+  color: rgb(var(--color-foreground) / 50%);
+  background: none;
+  border: none;
+  border-bottom: 0.2rem solid transparent;
+  margin-bottom: -0.1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--animation-duration--fast, 0.25s), border-color var(--animation-duration--fast, 0.25s);
+}
+
+.loyalty-tab:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.loyalty-tab.active {
+  color: rgb(var(--color-foreground));
+  border-bottom-color: rgb(var(--color-foreground));
+}
+
+/* ================================================================
+   TAB PANELS
+================================================================ */
+.loyalty-tab-panel {
+  min-height: 20rem;
+}
+
+/* ================================================================
+   CARDS (shared)
+================================================================ */
+.loyalty-card {
+  background: rgb(var(--color-background));
+  border: var(--border-width, 0.1rem) solid rgb(var(--color-border) / var(--color-border-alpha, 1));
+  border-radius: var(--dialog-radius, 1.2rem);
+  padding: clamp(2rem, 3vw, 3.2rem);
+  box-shadow: 0 0.2rem 0.8rem rgb(var(--color-foreground) / 4%);
+  transition: box-shadow var(--animation-duration--fast) var(--animation-easing);
+}
+
+.loyalty-card:hover {
+  box-shadow: 0 0.4rem 1.6rem rgb(var(--color-foreground) / 8%);
+}
+
+.loyalty-card__title {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--h3);
+  line-height: var(--font-h3--line-height, 1.357);
+  color: rgb(var(--color-foreground));
+  margin: 0 0 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.loyalty-card__body {
+  font-family: var(--font-body--family);
+  font-size: var(--font-size--paragraph);
+  color: rgb(var(--color-foreground) / 65%);
+  line-height: var(--font-paragraph--line-height, 1.6);
+  margin: 0 0 2.4rem;
+}
+
+/* ================================================================
+   EARN GRID
+================================================================ */
+.loyalty-earn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  gap: 2rem;
+}
+
+.loyalty-earn-card {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 2rem 2.4rem;
+}
+
+.earn-card__icon {
+  font-size: 2.8rem;
+  flex-shrink: 0;
+  width: 4.8rem;
+  height: 4.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--color-background-secondary, var(--color-foreground) / 5%));
+  border-radius: 1.2rem;
+}
+
+.earn-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.earn-card__name {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--h5, 1.8rem);
+  color: rgb(var(--color-foreground));
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.earn-card__desc {
+  font-size: calc(var(--font-size--paragraph) * 0.9);
+  color: rgb(var(--color-foreground) / 55%);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.earn-card__points {
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 6rem;
+}
+
+.earn-card__pts-value {
+  display: block;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: 2rem;
+  color: rgb(var(--color-foreground));
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.earn-card__pts-label {
+  display: block;
+  font-size: 1.1rem;
+  color: rgb(var(--color-foreground) / 45%);
+  margin-top: 0.2rem;
+}
+
+/* ================================================================
+   REWARDS GRID
+================================================================ */
+.loyalty-rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.4rem;
+}
+
+.loyalty-reward-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.reward-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+
+.reward-card__icon {
+  font-size: 2.8rem;
+  width: 4.8rem;
+  height: 4.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--color-background-secondary, var(--color-foreground) / 5%));
+  border-radius: 1.2rem;
+}
+
+.reward-card__badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  border-radius: 10rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.reward-card__name {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--h4, 2.2rem);
+  color: rgb(var(--color-foreground));
+  margin: 0 0 0.8rem;
+  letter-spacing: -0.02em;
+}
+
+.reward-card__desc {
+  font-size: var(--font-size--paragraph);
+  color: rgb(var(--color-foreground) / 60%);
+  margin: 0 0 2.4rem;
+  line-height: var(--font-paragraph--line-height, 1.6);
+  flex: 1;
+}
+
+/* ================================================================
+   REFERRAL
+================================================================ */
+.loyalty-referral-card {
+  max-width: 64rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.referral-link-box {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.loyalty-input {
+  flex: 1;
+  height: var(--input-height, 4.4rem);
+  padding: 0 1.6rem;
+  background: rgb(var(--color-input-background, var(--color-foreground) / 8%));
+  color: rgb(var(--color-input-text, var(--color-foreground)));
+  border: var(--input-border-width, 0.1rem) solid var(--input-border-color, transparent);
+  border-radius: var(--input-border-radius, 0.6rem);
+  font-family: var(--font-body--family);
+  font-size: var(--font-size--paragraph);
+  outline: none;
+  transition: border-color var(--animation-duration--fast) var(--animation-easing);
+}
+
+.loyalty-input:focus {
+  border-color: rgb(var(--color-foreground) / 40%);
+}
+
+.loyalty-copy-btn {
+  flex-shrink: 0;
+}
+
+.loyalty-hint {
+  margin-top: 1.2rem;
+  font-size: calc(var(--font-size--paragraph) * 0.9);
+  color: rgb(var(--color-foreground) / 55%);
+}
+
+/* ================================================================
+   HISTORY
+================================================================ */
+.loyalty-history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: var(--border-width, 0.1rem) solid rgb(var(--color-border) / var(--color-border-alpha, 1));
+  border-radius: var(--dialog-radius, 1.2rem);
+  overflow: hidden;
+  background: rgb(var(--color-background));
+}
+
+.loyalty-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.6rem 2.4rem;
+  border-bottom: var(--border-width, 0.1rem) solid rgb(var(--color-border) / var(--color-border-alpha, 1));
+  transition: background var(--animation-duration--fast);
+}
+
+.loyalty-history-item:last-child {
+  border-bottom: none;
+}
+
+.loyalty-history-item:hover {
+  background: rgb(var(--color-foreground) / 2%);
+}
+
+.history-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.history-item__desc {
+  font-size: var(--font-size--paragraph);
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+}
+
+.history-item__date {
+  font-size: calc(var(--font-size--paragraph) * 0.866667);
+  color: rgb(var(--color-foreground) / 45%);
+}
+
+.history-item__points {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: 1.6rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--input-border-radius, 0.6rem);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.history-item__points.positive {
+  background: rgb(var(--color-notification-success, 10 155 97) / 12%);
+  color: rgb(var(--color-notification-success, 10 155 97));
+}
+
+.history-item__points.negative {
+  background: rgb(var(--color-notification-error, 196 48 28) / 12%);
+  color: rgb(var(--color-notification-error, 196 48 28));
+}
+
+/* ================================================================
+   GUEST / LOGGED OUT
+================================================================ */
+.loyalty-guest {
+  max-width: 64rem;
+  margin-inline: auto;
+  text-align: center;
+  padding: clamp(4rem, 6vw, 8rem) clamp(2.4rem, 5vw, 6.4rem);
+}
+
+.loyalty-guest__icon {
+  font-size: 5.6rem;
+  margin-bottom: 2.4rem;
+  line-height: 1;
+}
+
+.loyalty-guest__heading {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: var(--font-size--h2);
+  line-height: var(--font-h2--line-height, 1.3125);
+  color: rgb(var(--color-foreground));
+  margin: 0 0 1.6rem;
+  letter-spacing: -0.03em;
+}
+
+.loyalty-guest__body {
+  font-size: var(--font-size--paragraph);
+  color: rgb(var(--color-foreground) / 65%);
+  line-height: var(--font-paragraph--line-height, 1.6);
+  margin: 0 0 3.2rem;
+}
+
+.loyalty-guest__actions {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ================================================================
+   ALERTS
+================================================================ */
+.loyalty-alert {
+  border-radius: var(--input-border-radius, 0.6rem);
+  padding: 1.4rem 2rem;
+  font-size: var(--font-size--paragraph);
+  font-weight: 500;
+  margin-top: 2rem;
+}
+
+.loyalty-alert--success {
+  background: rgb(var(--color-notification-success, 10 155 97) / 12%);
+  color: rgb(var(--color-notification-success, 10 155 97));
+  border: 0.1rem solid rgb(var(--color-notification-success, 10 155 97) / 25%);
+}
+
+.loyalty-alert--error {
+  background: rgb(var(--color-notification-error, 196 48 28) / 12%);
+  color: rgb(var(--color-notification-error, 196 48 28));
+  border: 0.1rem solid rgb(var(--color-notification-error, 196 48 28) / 25%);
+}
+
+/* ================================================================
+   LOADING SPINNER
+================================================================ */
+.loyalty-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+}
+
+.loyalty-spinner {
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 0.3rem solid rgb(var(--color-foreground) / 15%);
+  border-top-color: rgb(var(--color-foreground) / 60%);
+  border-radius: 50%;
+  animation: loyalty-spin 0.8s linear infinite;
+}
+
+@keyframes loyalty-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   EMPTY STATE
+================================================================ */
+.loyalty-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgb(var(--color-foreground) / 45%);
+  font-size: var(--font-size--paragraph);
+}
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media (max-width: 767px) {
+  .loyalty-hero__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .loyalty-hero__balance-wrap {
+    text-align: center;
+  }
+  .loyalty-hero__balance {
+    justify-content: center;
+  }
+  .loyalty-hero__tier {
+    text-align: center;
+  }
+
+  .loyalty-earn-grid,
+  .loyalty-rewards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-link-box {
+    flex-direction: column;
+  }
+
+  .loyalty-history-item {
+    padding: 1.4rem 1.6rem;
+  }
+}

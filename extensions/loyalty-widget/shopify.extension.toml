@@ -1,0 +1,20 @@
+api_version = "2024-10"
+type = "theme"
+name = "Doomlings Loyalty Widget"
+handle = "loyalty-widget"
+
+[[targeting]]
+  module = "./blocks/loyalty-page.liquid"
+  target = "section"
+
+[[targeting]]
+  module = "./blocks/loyalty-balance-bar.liquid"
+  target = "section"
+
+[[targeting]]
+  module = "./blocks/loyalty-earn.liquid"
+  target = "section"
+
+[[targeting]]
+  module = "./blocks/loyalty-rewards.liquid"
+  target = "section"

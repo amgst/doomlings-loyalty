@@ -1,0 +1,49 @@
+name = "doomlings-loyalty"
+client_id = "REPLACE_WITH_YOUR_CLIENT_ID"
+application_url = "https://REPLACE_WITH_YOUR_APP_URL"
+embedded = true
+
+[access_scopes]
+scopes = "read_customers,write_customers,read_orders,write_orders,read_products,read_script_tags,write_script_tags"
+
+[auth]
+redirect_urls = [
+  "https://REPLACE_WITH_YOUR_APP_URL/auth/callback",
+  "https://REPLACE_WITH_YOUR_APP_URL/auth/shopify/callback",
+  "https://REPLACE_WITH_YOUR_APP_URL/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/data_request"]
+  uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = ["customers/redact"]
+  uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = ["shop/redact"]
+  uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = ["orders/paid"]
+  uri = "/webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = ["orders/fulfilled"]
+  uri = "/webhooks"
+
+[app_proxy]
+url = "https://REPLACE_WITH_YOUR_APP_URL/proxy"
+subpath = "loyalty"
+prefix = "apps"
+
+[pos]
+embedded = false

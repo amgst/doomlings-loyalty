@@ -1,0 +1,121 @@
+{%- doc -%}
+  This snippet is used to render the quantity selector for a product.
+  It is used in the product page and the cart page.
+
+  @param {object} [section] - Section that render this selector
+  @param {object} product - the product to render the quantity selector for
+  @param {number} [in_cart_quantity] - the quantity in the cart to set the input value
+  @param {number} [line_index] - the index of the forloop representing the line on which the quantity selector is rendered
+  @param {number} [min] - the minimum quantity the input supports
+  @param {string} [class] - custom class for the quantity selector, optional
+  @param {boolean} [can_update_quantity] - whether the quantity can be updated, defaults to true
+  @param {object} [block] - the block to render the quantity selector for
+  @param {string} [context] - the context of the quantity selector, optional
+{%- enddoc -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign quantity_button_icon_size = 'small'
+  assign product_id_string = product.id | append: ''
+  assign cart_quantity_rules_metafield = shop.metafields.upsale.cart_quantity_rules
+  assign cart_quantity_rules = blank
+  if cart_quantity_rules_metafield != blank and cart_quantity_rules_metafield.value != blank
+    assign cart_quantity_rules = cart_quantity_rules_metafield.value.rules
+  endif
+  assign cart_quantity_limit = blank
+  if cart_quantity_rules != blank
+    for rule in cart_quantity_rules
+      assign rule_product_id = rule.productId | append: ''
+      if rule.enabled and rule_product_id == product_id_string
+        assign cart_quantity_limit = rule.quantity | default: 1
+        break
+      endif
+    endfor
+  endif
+  assign has_cart_quantity_limit = false
+  if cart_quantity_limit != blank
+    assign has_cart_quantity_limit = true
+  endif
+  assign enforced_min = min | default: 1
+  assign enforced_max = variant.quantity_rule.max
+  assign lock_cart_selector = false
+  if has_cart_quantity_limit
+    assign enforced_max = cart_quantity_limit
+    if context == 'cart-items'
+      assign lock_cart_selector = true
+    endif
+  endif
+  if line_index
+    assign quantity_button_icon_size = 'extra-small'
+  endif
+-%}
+{%- capture input_id -%}Quantity-{{ section.id }}-{{ line_index }}{%- endcapture -%}
+<quantity-selector-component
+  class="quantity-selector relative inline-flex{% if class %} {{ class }}{% endif %}"
+  {% if line_index == null %}
+    {{- block.shopify_attributes -}}
+  {% endif %}
+  ref="quantitySelectors[]"
+  data-context="{{ context | default: 'product' }}"
+  data-product-id="{{ product.id }}"
+  {% if has_cart_quantity_limit %}
+    data-max-quantity="{{ cart_quantity_limit }}"
+  {% endif %}
+  {% if lock_cart_selector %}
+    data-locked-quantity="{{ in_cart_quantity | default: 1 }}"
+  {% endif %}
+>
+  <label for="{{ input_id }}" class="visually-hidden">{{ 'accessibility.quantity' | t }}</label>
+  <button
+    class="quantity-minus quantity-button button-unstyled absolute flex items-center justify-center text-center cursor-pointer no-js-hidden"
+    type="button"
+    name="minus"
+    on:click="/decreaseQuantity"
+    ref="quantityButtons[]"
+    aria-label="{{ 'accessibility.decrease_quantity' | t }}"
+    {% if can_update_quantity == false or lock_cart_selector %}
+      disabled
+    {% endif %}
+    {% if lock_cart_selector %}
+      hidden
+    {% endif %}
+  >
+    {% render 'icon', icon: 'minus', size: quantity_button_icon_size %}
+  </button>
+  <input
+    id="{{ input_id }}"
+    class="quantity-input w-full text-center"
+    type="number"
+    name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
+    value="{{ in_cart_quantity | default: 1 }}"
+    min="{{ enforced_min }}"
+    on:blur="/setQuantity"
+    on:focus="/selectInputValue"
+    ref="quantityInput"
+    {% if line_index %}
+      data-cart-line="{{ line_index | plus: 1 }}"
+    {% endif %}
+    {% if enforced_max %}
+      max="{{ enforced_max }}"
+    {% endif %}
+    step="{{ variant.quantity_rule.increment | default: 1 }}"
+    {% if can_update_quantity == false or variant.available == false or lock_cart_selector %}
+      disabled
+    {% endif %}
+  >
+  <button
+    class="quantity-plus quantity-button button-unstyled absolute flex items-center justify-center text-center cursor-pointer no-js-hidden"
+    type="button"
+    name="plus"
+    on:click="/increaseQuantity"
+    ref="quantityButtons[]"
+    aria-label="{{ 'accessibility.increase_quantity' | t }}"
+    {% if can_update_quantity == false or lock_cart_selector %}
+      disabled
+    {% endif %}
+    {% if lock_cart_selector %}
+      hidden
+    {% endif %}
+  >
+    {% render 'icon', icon: 'plus', size: quantity_button_icon_size %}
+  </button>
+</quantity-selector-component>

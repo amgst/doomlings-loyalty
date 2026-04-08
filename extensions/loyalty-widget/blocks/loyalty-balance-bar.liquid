@@ -1,0 +1,151 @@
+{% comment %}
+  Doomlings Loyalty — Balance Bar Block
+  A compact header-style bar showing the logged-in customer's points balance.
+  Drop this into any section (e.g. above product pages or the account page).
+{% endcomment %}
+
+{%- liquid
+  assign app_url = settings.doomlings_loyalty_app_url | default: ''
+  assign color_scheme = section.settings.color_scheme | default: 'scheme-1'
+-%}
+
+{{ 'loyalty-widget.css' | asset_url | stylesheet_tag }}
+
+<div class="loyalty-balance-bar color-{{ color_scheme }}" id="loyalty-balance-bar">
+  <div class="loyalty-container">
+    <div class="balance-bar__inner">
+      {%- if customer -%}
+        <div class="balance-bar__label">
+          <span class="balance-bar__icon" id="bb-icon">★</span>
+          <span id="bb-label">Your {{ block.settings.points_label | default: 'Doomlings Points' }}</span>
+        </div>
+        <div class="balance-bar__value">
+          <strong id="bb-value">—</strong>
+          <span id="bb-pts">pts</span>
+        </div>
+        <a href="{{ block.settings.loyalty_page_url | default: '/pages/loyalty' }}" class="btn btn--secondary btn--medium balance-bar__cta">
+          {{ block.settings.cta_label | default: 'View Rewards' }}
+        </a>
+      {%- else -%}
+        <p class="balance-bar__guest">
+          <a href="{{ routes.account_login_url }}">{{ block.settings.guest_label | default: 'Sign in to view your points balance' }}</a>
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if customer -%}
+<script>
+(function() {
+  var APP_URL = {{ app_url | json }};
+  var SHOP = {{ shop.permanent_domain | json }};
+  var EMAIL = {{ customer.email | json }};
+  if (!APP_URL) return;
+  fetch(APP_URL + '/api/loyalty?shop=' + encodeURIComponent(SHOP) + '&email=' + encodeURIComponent(EMAIL))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.customer) return;
+      document.getElementById('bb-icon').textContent = data.currencySymbol || '★';
+      document.getElementById('bb-label').textContent = 'Your ' + (data.pointsNamePlural || 'Doomlings Points');
+      document.getElementById('bb-value').textContent = data.customer.pointsBalance.toLocaleString();
+      document.getElementById('bb-pts').textContent = data.pointsNamePlural || 'pts';
+    });
+})();
+</script>
+{%- endif -%}
+
+<style>
+.loyalty-balance-bar {
+  border-bottom: var(--border-width, 0.1rem) solid rgb(var(--color-border) / var(--color-border-alpha, 1));
+  padding: 1.4rem 0;
+}
+.balance-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: var(--page-width, 144rem);
+  margin-inline: auto;
+  padding-inline: clamp(1.6rem, 4vw, 4rem);
+}
+.balance-bar__label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: rgb(var(--color-foreground) / 70%);
+  flex: 1;
+}
+.balance-bar__icon { font-size: 1.8rem; }
+.balance-bar__value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--font-heading--family);
+}
+.balance-bar__value strong {
+  font-size: 2.2rem;
+  font-weight: var(--font-heading--weight, 700);
+  color: rgb(var(--color-foreground));
+  letter-spacing: -0.03em;
+}
+.balance-bar__value span {
+  font-size: 1.2rem;
+  color: rgb(var(--color-foreground) / 50%);
+}
+.balance-bar__cta { flex-shrink: 0; }
+.balance-bar__guest {
+  font-size: 1.3rem;
+  color: rgb(var(--color-foreground) / 55%);
+  margin: 0;
+}
+.balance-bar__guest a {
+  color: rgb(var(--color-foreground));
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+@media (max-width: 767px) {
+  .balance-bar__inner { flex-wrap: wrap; gap: 1.2rem; }
+  .balance-bar__label { flex-basis: 100%; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Loyalty Balance Bar",
+  "target": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "points_label",
+      "label": "Points label",
+      "default": "Doomlings Points"
+    },
+    {
+      "type": "url",
+      "id": "loyalty_page_url",
+      "label": "Loyalty page URL"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "View Rewards"
+    },
+    {
+      "type": "text",
+      "id": "guest_label",
+      "label": "Logged-out message",
+      "default": "Sign in to view your points balance"
+    }
+  ]
+}
+{% endschema %}
