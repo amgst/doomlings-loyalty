@@ -13,7 +13,14 @@ import { AppProvider } from "@shopify/shopify-app-remix/react";
 export const links: LinksFunction = () => [];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
+  const url = new URL(request.url);
+  const hasShopifyContext =
+    Boolean(url.searchParams.get("shop")) || Boolean(url.searchParams.get("host"));
+
+  return json({
+    apiKey: process.env.SHOPIFY_API_KEY || "",
+    isEmbeddedApp: hasShopifyContext,
+  });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -40,10 +47,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { apiKey } = useLoaderData<typeof loader>();
+  const { apiKey, isEmbeddedApp } = useLoaderData<typeof loader>();
 
   return (
-    <AppProvider isEmbeddedApp apiKey={apiKey}>
+    <AppProvider isEmbeddedApp={isEmbeddedApp} apiKey={apiKey}>
       <Outlet />
     </AppProvider>
   );
