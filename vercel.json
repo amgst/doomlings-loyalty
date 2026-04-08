@@ -3,6 +3,5 @@
   "buildCommand": "npm run vercel-build",
   "framework": "remix",
   "installCommand": "npm install",
-  "nodeVersion": "20.x",
   "regions": ["iad1"]
 }
