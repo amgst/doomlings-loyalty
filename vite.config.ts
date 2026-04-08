@@ -1,6 +1,7 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig, type UserConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { vercelPreset } from "@vercel/remix/vite";
 
 // Related: https://github.com/remix-run/remix/issues/2835#issuecomment-1144102176
 // Replace the ^ with the same version in your package.json and update the line below.
@@ -17,6 +18,7 @@ export default defineConfig({
   },
   plugins: [
     remix({
+      presets: [vercelPreset()],
       ignoredRouteFiles: ["**/.*"],
       future: {
         v3_fetcherPersist: true,

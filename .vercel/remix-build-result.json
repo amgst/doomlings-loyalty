@@ -1,0 +1,223 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs-eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "root": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/proxy.loyalty[.]css": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/proxy.customer": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/app.customers": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/app.settings": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/proxy._index": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/api.loyalty": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/app._index": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.login": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/webhooks": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/auth.$": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "app/root.tsx",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/proxy.loyalty[.]css": {
+        "file": "app/routes/proxy.loyalty[.]css.tsx",
+        "id": "routes/proxy.loyalty[.]css",
+        "path": "loyalty.css",
+        "parentId": "routes/proxy",
+        "config": {}
+      },
+      "routes/proxy.customer": {
+        "file": "app/routes/proxy.customer.tsx",
+        "id": "routes/proxy.customer",
+        "path": "customer",
+        "parentId": "routes/proxy",
+        "config": {}
+      },
+      "routes/app.customers": {
+        "file": "app/routes/app.customers.tsx",
+        "id": "routes/app.customers",
+        "path": "customers",
+        "parentId": "routes/app",
+        "config": {}
+      },
+      "routes/app.settings": {
+        "file": "app/routes/app.settings.tsx",
+        "id": "routes/app.settings",
+        "path": "settings",
+        "parentId": "routes/app",
+        "config": {}
+      },
+      "routes/proxy._index": {
+        "file": "app/routes/proxy._index.tsx",
+        "id": "routes/proxy._index",
+        "index": true,
+        "parentId": "routes/proxy",
+        "config": {}
+      },
+      "routes/api.loyalty": {
+        "file": "app/routes/api.loyalty.tsx",
+        "id": "routes/api.loyalty",
+        "path": "api/loyalty",
+        "parentId": "root",
+        "config": {}
+      },
+      "routes/app._index": {
+        "file": "app/routes/app._index.tsx",
+        "id": "routes/app._index",
+        "index": true,
+        "parentId": "routes/app",
+        "config": {}
+      },
+      "routes/auth.login": {
+        "file": "app/routes/auth.login/route.tsx",
+        "id": "routes/auth.login",
+        "path": "auth/login",
+        "parentId": "root",
+        "config": {}
+      },
+      "routes/webhooks": {
+        "file": "app/routes/webhooks.tsx",
+        "id": "routes/webhooks",
+        "path": "webhooks",
+        "parentId": "root",
+        "config": {}
+      },
+      "routes/auth.$": {
+        "file": "app/routes/auth.$.tsx",
+        "id": "routes/auth.$",
+        "path": "auth/*",
+        "parentId": "root",
+        "config": {}
+      },
+      "routes/proxy": {
+        "file": "app/routes/proxy.tsx",
+        "id": "routes/proxy",
+        "path": "proxy",
+        "parentId": "root",
+        "config": {}
+      },
+      "routes/app": {
+        "file": "app/routes/app.tsx",
+        "id": "routes/app",
+        "path": "app",
+        "parentId": "root",
+        "config": {}
+      }
+    }
+  },
+  "remixConfig": {
+    "appDirectory": "C:\\shopify apps\\Doomlings Loyalty\\app",
+    "basename": "/",
+    "buildDirectory": "C:\\shopify apps\\Doomlings Loyalty\\build",
+    "future": {
+      "v3_fetcherPersist": true,
+      "v3_relativeSplatPath": true,
+      "v3_throwAbortReason": true,
+      "v3_routeConfig": false,
+      "v3_singleFetch": false,
+      "v3_lazyRouteDiscovery": false,
+      "unstable_optimizeDeps": false
+    },
+    "manifest": false,
+    "publicPath": "/",
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "root.tsx"
+      },
+      "routes/proxy.loyalty[.]css": {
+        "file": "routes/proxy.loyalty[.]css.tsx",
+        "id": "routes/proxy.loyalty[.]css",
+        "path": "loyalty.css",
+        "parentId": "routes/proxy"
+      },
+      "routes/proxy.customer": {
+        "file": "routes/proxy.customer.tsx",
+        "id": "routes/proxy.customer",
+        "path": "customer",
+        "parentId": "routes/proxy"
+      },
+      "routes/app.customers": {
+        "file": "routes/app.customers.tsx",
+        "id": "routes/app.customers",
+        "path": "customers",
+        "parentId": "routes/app"
+      },
+      "routes/app.settings": {
+        "file": "routes/app.settings.tsx",
+        "id": "routes/app.settings",
+        "path": "settings",
+        "parentId": "routes/app"
+      },
+      "routes/proxy._index": {
+        "file": "routes/proxy._index.tsx",
+        "id": "routes/proxy._index",
+        "index": true,
+        "parentId": "routes/proxy"
+      },
+      "routes/api.loyalty": {
+        "file": "routes/api.loyalty.tsx",
+        "id": "routes/api.loyalty",
+        "path": "api/loyalty",
+        "parentId": "root"
+      },
+      "routes/app._index": {
+        "file": "routes/app._index.tsx",
+        "id": "routes/app._index",
+        "index": true,
+        "parentId": "routes/app"
+      },
+      "routes/auth.login": {
+        "file": "routes/auth.login/route.tsx",
+        "id": "routes/auth.login",
+        "path": "auth/login",
+        "parentId": "root"
+      },
+      "routes/webhooks": {
+        "file": "routes/webhooks.tsx",
+        "id": "routes/webhooks",
+        "path": "webhooks",
+        "parentId": "root"
+      },
+      "routes/auth.$": {
+        "file": "routes/auth.$.tsx",
+        "id": "routes/auth.$",
+        "path": "auth/*",
+        "parentId": "root"
+      },
+      "routes/proxy": {
+        "file": "routes/proxy.tsx",
+        "id": "routes/proxy",
+        "path": "proxy",
+        "parentId": "root"
+      },
+      "routes/app": {
+        "file": "routes/app.tsx",
+        "id": "routes/app",
+        "path": "app",
+        "parentId": "root"
+      }
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
