@@ -4,10 +4,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { AppProvider } from "@shopify/shopify-app-remix/react";
 
 export const links: LinksFunction = () => [];
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -33,5 +40,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { apiKey } = useLoaderData<typeof loader>();
+  return (
+    <AppProvider isEmbeddedApp apiKey={apiKey}>
+      <Outlet />
+    </AppProvider>
+  );
 }
