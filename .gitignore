@@ -9,7 +9,7 @@ node_modules/
 # Build output
 build/
 .cache/
-
+theme/
 # Database
 *.db
 *.db-journal

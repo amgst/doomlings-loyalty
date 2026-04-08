@@ -1,4 +1,5 @@
 api_version = "2024-10"
+uid = "63dc22e1-27da-358d-1f2a-1e6d9b60e4b66a03a917"
 type = "theme"
 name = "Doomlings Loyalty Widget"
 handle = "loyalty-widget"

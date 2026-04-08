@@ -1,20 +1,23 @@
-name = "doomlings-loyalty"
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
 client_id = "727461e2b7d83e0398ab7ed9114fba83"
-application_url = "https://REPLACE_WITH_YOUR_APP_URL"
+name = "Doomlings Loyalty"
+application_url = "https://doomlings-loyalty.vercel.app"
 embedded = true
 
 [access_scopes]
 scopes = "read_customers,write_customers,read_orders,write_orders,read_products,read_script_tags,write_script_tags"
+use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [
-  "https://REPLACE_WITH_YOUR_APP_URL/auth/callback",
-  "https://REPLACE_WITH_YOUR_APP_URL/auth/shopify/callback",
-  "https://REPLACE_WITH_YOUR_APP_URL/api/auth/callback"
+  "https://doomlings-loyalty.vercel.app/auth/callback",
+  "https://doomlings-loyalty.vercel.app/auth/shopify/callback",
+  "https://doomlings-loyalty.vercel.app/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2024-10"
+api_version = "2026-04"
 
   [[webhooks.subscriptions]]
   topics = ["app/uninstalled"]
@@ -41,7 +44,7 @@ api_version = "2024-10"
   uri = "/webhooks"
 
 [app_proxy]
-url = "https://REPLACE_WITH_YOUR_APP_URL/proxy"
+url = "https://doomlings-loyalty.vercel.app/proxy"
 subpath = "loyalty"
 prefix = "apps"
 
