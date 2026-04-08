@@ -14,12 +14,14 @@ export const links: LinksFunction = () => [];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
-  const hasShopifyContext =
-    Boolean(url.searchParams.get("shop")) || Boolean(url.searchParams.get("host"));
+  // `host` is always present when loaded from the Shopify admin iframe.
+  // Using only `host` (not `shop`) avoids a false-positive on proxy requests
+  // that also carry a `shop` param.
+  const isEmbeddedApp = Boolean(url.searchParams.get("host"));
 
   return json({
     apiKey: process.env.SHOPIFY_API_KEY || "",
-    isEmbeddedApp: hasShopifyContext,
+    isEmbeddedApp,
   });
 }
 

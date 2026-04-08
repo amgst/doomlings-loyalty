@@ -1,25 +1,14 @@
 /**
  * App Proxy parent route.
  * All /proxy/* routes go through here.
- * `authenticate.public.appProxy` validates Shopify's HMAC signature so
- * we know every request is genuinely from the storefront.
+ * Auth is handled individually by each child route so that static assets
+ * (e.g. /proxy/loyalty.css) can be served without requiring a Shopify HMAC.
  */
-import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
 
-// Validate proxy on every loader in this subtree
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.public.appProxy(request);
-  return null;
-};
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-  await authenticate.public.appProxy(request);
-  return null;
-};
-
-// No UI — child routes handle rendering
+// No parent-level auth — child routes (proxy._index, proxy.customer) call
+// authenticate.public.appProxy themselves. This allows loyalty.css to be
+// fetched directly by the browser without a Shopify signature.
 export default function ProxyLayout() {
   return <Outlet />;
 }

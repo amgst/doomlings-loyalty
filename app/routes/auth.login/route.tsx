@@ -1,12 +1,10 @@
 import type {
   ActionFunctionArgs,
-  AppLoadContext,
   LoaderFunctionArgs,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { login } from "../../shopify.server";
-import indexStyles from "./styles.module.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
