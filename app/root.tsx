@@ -8,17 +8,16 @@ import {
 } from "@remix-run/react";
 import { json } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { AppProvider } from "@shopify/shopify-app-remix/react";
+
+const APP_BRIDGE_URL =
+  "https://cdn.shopify.com/shopifycloud/app-bridge.js";
 
 export const links: LinksFunction = () => [];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
-  // `host` is always present when loaded from the Shopify admin iframe.
-  // Using only `host` (not `shop`) avoids a false-positive on proxy requests
-  // that also carry a `shop` param.
+  // `host` is always present when Shopify admin loads the embedded app.
   const isEmbeddedApp = Boolean(url.searchParams.get("host"));
-
   return json({
     apiKey: process.env.SHOPIFY_API_KEY || "",
     isEmbeddedApp,
@@ -52,8 +51,21 @@ export default function App() {
   const { apiKey, isEmbeddedApp } = useLoaderData<typeof loader>();
 
   return (
-    <AppProvider isEmbeddedApp={isEmbeddedApp} apiKey={apiKey}>
+    <>
+      {/*
+        Inject App Bridge directly — no Polaris wrapper needed since we use
+        zero Polaris components. Putting it here (after <Links /> and before
+        app content) lets App Bridge initialise before the UI renders while
+        still being inside the React tree so React can hydrate it cleanly.
+      */}
+      {isEmbeddedApp && (
+        <script
+          src={APP_BRIDGE_URL}
+          data-api-key={apiKey}
+          suppressHydrationWarning
+        />
+      )}
       <Outlet />
-    </AppProvider>
+    </>
   );
 }
