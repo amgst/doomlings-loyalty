@@ -134,7 +134,7 @@ export default function CustomersPage() {
             <div className="profile-stats">
               <div className="profile-stat">
                 <span className="profile-stat-value">
-                  {currencySymbol} {actionData.customer.pointsBalance.toLocaleString()}
+                  {currencySymbol} {formatNumber(actionData.customer.pointsBalance)}
                 </span>
                 <span className="profile-stat-label">{pointsName} Balance</span>
               </div>
@@ -197,11 +197,7 @@ export default function CustomersPage() {
                   <li key={event.id} className="history-item">
                     <div className="history-main">
                       <span className="history-action">{event.description}</span>
-                      <span className="history-date">
-                        {new Date(event.createdAt).toLocaleDateString("en-US", {
-                          month: "short", day: "numeric", year: "numeric"
-                        })}
-                      </span>
+                      <span className="history-date">{formatEventDate(event.createdAt)}</span>
                     </div>
                     <span className={`history-points ${event.points >= 0 ? "positive" : "negative"}`}>
                       {event.points >= 0 ? "+" : ""}{event.points}
@@ -217,6 +213,22 @@ export default function CustomersPage() {
       <style>{customerStyles}</style>
     </div>
   );
+}
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatNumber(value: number) {
+  return numberFormatter.format(value);
+}
+
+function formatEventDate(value: string) {
+  return dateFormatter.format(new Date(value));
 }
 
 const customerStyles = `

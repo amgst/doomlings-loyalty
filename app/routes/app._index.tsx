@@ -87,10 +87,10 @@ export default function AppIndex() {
       {/* Stats Grid */}
       <div className="stats-grid">
         {[
-          { label: "Total Members", value: stats.totalCustomers.toLocaleString(), icon: "◉", note: "All time" },
-          { label: "Active This Month", value: stats.activeMembers.toLocaleString(), icon: "▲", note: "Last 30 days" },
-          { label: `${pointsName} Issued`, value: stats.pointsIssued.toLocaleString(), icon: currencySymbol, note: "All time" },
-          { label: "Rewards Redeemed", value: stats.rewardsRedeemed.toLocaleString(), icon: "⬡", note: "All time" },
+          { label: "Total Members", value: formatNumber(stats.totalCustomers), icon: "◉", note: "All time" },
+          { label: "Active This Month", value: formatNumber(stats.activeMembers), icon: "▲", note: "Last 30 days" },
+          { label: `${pointsName} Issued`, value: formatNumber(stats.pointsIssued), icon: currencySymbol, note: "All time" },
+          { label: "Rewards Redeemed", value: formatNumber(stats.rewardsRedeemed), icon: "⬡", note: "All time" },
         ].map((stat) => (
           <div key={stat.label} className="stat-card">
             <div className="stat-icon">{stat.icon}</div>
@@ -169,6 +169,12 @@ function iconEmoji(icon: string) {
     star: "⭐", sparkles: "✨", heart: "❤",
   };
   return map[icon] || "⭐";
+}
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+function formatNumber(value: number) {
+  return numberFormatter.format(value);
 }
 
 export const adminStyles = `
