@@ -44,8 +44,12 @@ const shopify = shopifyApp({
   scopes: shopifyScopes,
   appUrl: shopifyAppUrl,
   authPathPrefix: "/auth",
+  isEmbeddedApp: true,
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
+  future: {
+    unstable_newEmbeddedAuthStrategy: true,
+  },
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),

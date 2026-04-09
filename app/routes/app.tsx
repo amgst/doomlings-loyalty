@@ -1,14 +1,24 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link, Outlet, useLocation } from "@remix-run/react";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { Link, Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
+import { boundary } from "@shopify/shopify-app-remix/server";
+import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
-  return json({ ok: true });
+  return { apiKey: process.env.SHOPIFY_API_KEY || "" };
+};
+
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
 };
 
 export default function AppLayout() {
+  const { apiKey } = useLoaderData<typeof loader>();
   const location = useLocation();
 
   const nav = [
@@ -18,6 +28,7 @@ export default function AppLayout() {
   ];
 
   return (
+    <AppProvider isEmbeddedApp apiKey={apiKey}>
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
@@ -119,5 +130,6 @@ export default function AppLayout() {
         }
       `}</style>
     </div>
+    </AppProvider>
   );
 }
