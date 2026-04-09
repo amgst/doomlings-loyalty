@@ -5,7 +5,9 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import type { EntryContext } from "@remix-run/node";
 import { addDocumentResponseHeaders } from "./shopify.server";
 
-const ABORT_DELAY = 5_000;
+// Give the SSR render 15 s before aborting — NeonDB free tier can have
+// 3-5 s cold-start delays and the token exchange adds another round trip.
+const ABORT_DELAY = 15_000;
 
 export default async function handleRequest(
   request: Request,
@@ -34,11 +36,12 @@ export default async function handleRequest(
           pipe(body);
         },
         onShellError(error) {
+          console.error("Shell render error", error);
           reject(error);
         },
         onError(error) {
           didError = true;
-          console.error(error);
+          console.error("SSR render error", error);
         },
       }
     );

@@ -26,7 +26,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning on <html> and <body>: App Bridge runs its
+    // initialisation script before React hydrates and can add attributes
+    // (classes, data-* etc.) to these elements. Without this flag React
+    // would throw #418 every time because the server-rendered attributes
+    // won't match what the browser has after App Bridge mutates the DOM.
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -52,12 +57,6 @@ export default function App() {
 
   return (
     <>
-      {/*
-        Inject App Bridge directly — no Polaris wrapper needed since we use
-        zero Polaris components. Putting it here (after <Links /> and before
-        app content) lets App Bridge initialise before the UI renders while
-        still being inside the React tree so React can hydrate it cleanly.
-      */}
       {isEmbeddedApp && (
         <script
           src={APP_BRIDGE_URL}
