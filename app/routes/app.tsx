@@ -1,4 +1,5 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { useEffect } from "react";
 import { Link, Outlet, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { authenticate } from "../shopify.server";
@@ -20,6 +21,15 @@ export default function AppLayout() {
   const { apiKey } = useLoaderData<typeof loader>();
   const location = useLocation();
 
+  useEffect(() => {
+    if (apiKey && !document.querySelector("script[data-api-key]")) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.shopify.com/shopifycloud/app-bridge.js";
+      script.setAttribute("data-api-key", apiKey);
+      document.head.appendChild(script);
+    }
+  }, [apiKey]);
+
   const nav = [
     { href: "/app", label: "Overview", icon: "⬡" },
     { href: "/app/customers", label: "Customers", icon: "◉" },
@@ -27,12 +37,6 @@ export default function AppLayout() {
   ];
 
   return (
-    <>
-    <script
-      src="https://cdn.shopify.com/shopifycloud/app-bridge.js"
-      data-api-key={apiKey}
-      suppressHydrationWarning
-    />
     <div className="app-shell">
       <aside className="sidebar">
         <div className="sidebar-brand">
@@ -134,6 +138,5 @@ export default function AppLayout() {
         }
       `}</style>
     </div>
-    </>
   );
 }
